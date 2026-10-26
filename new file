@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>🚨 Top Secret Protocol 🚨</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: #0f172a;
+      color: #f8fafc;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+
+    .card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 24px;
+      padding: 28px 22px;
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      position: relative;
+    }
+
+    .step {
+      display: none;
+      animation: fadeIn 0.4s ease forwards;
+    }
+
+    .step.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 14px;
+      background: rgba(239, 68, 68, 0.2);
+      color: #f87171;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 12px;
+      font-weight: 800;
+    }
+
+    p {
+      color: #94a3b8;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+
+    .emoji-big {
+      font-size: 3.5rem;
+      margin-bottom: 16px;
+      display: inline-block;
+    }
+
+    .btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px 18px;
+      border: none;
+      border-radius: 14px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: #3b82f6;
+      color: #fff;
+    }
+
+    button:active {
+      transform: scale(0.97);
+    }
+
+    .btn-secondary {
+      background: #334155;
+      color: #e2e8f0;
+    }
+
+    .btn-accent {
+      background: #ec4899;
+      color: #fff;
+    }
+
+    /* Runaway "No" button setup */
+    .button-arena {
+      position: relative;
+      height: 120px;
+      margin-top: 10px;
+    }
+
+    #btn-runaway {
+      position: absolute;
+      left: 10%;
+      top: 60px;
+      width: 80%;
+      background: #475569;
+    }
+
+    #btn-yes {
+      position: absolute;
+      left: 10%;
+      top: 0;
+      width: 80%;
+      background: #10b981;
+    }
+
+    /* Coupon / Voucher Grid */
+    .voucher {
+      background: #0f172a;
+      border: 1px dashed #64748b;
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 10px;
+      text-align: left;
+    }
+
+    .voucher-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #fbbf24;
+      margin-bottom: 4px;
+    }
+
+    .voucher-desc {
+      font-size: 0.8rem;
+      color: #94a3b8;
+      margin-bottom: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+
+    <!-- STEP 1: FAKE VERIFICATION -->
+    <div class="step active" id="step1">
+      <div class="badge">Security Notice</div>
+      <div class="emoji-big">🕵️‍♂️</div>
+      <h1>Identity Check</h1>
+      <p>Midnight biometric check required. Are you officially 1 year older right now?</p>
+      
+      <div class="btn-group">
+        <button onclick="nextStep(2)">Yes, unfortunately 👵</button>
+        <button class="btn-secondary" onclick="nextStep(2)">No, I’m forever 21 😎</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: THE RUNAWAY BUTTON -->
+    <div class="step" id="step2">
+      <div class="badge">Mandatory Question</div>
+      <div class="emoji-big">🤔</div>
+      <h1>Be Honest</h1>
+      <p>Do you agree that you are the most dramatic and pampered person in this relationship?</p>
+      
+      <div class="button-arena">
+        <button id="btn-yes" onclick="celebrateAndProceed()">Yes, 100% accurate</button>
+        <button id="btn-runaway" onmouseover="dodgeButton()" onclick="dodgeButton()">Nope, not me</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: CELEBRATION & OPTIONS -->
+    <div class="step" id="step3">
+      <div class="badge" style="background: rgba(16, 185, 129, 0.2); color: #34d399;">Midnight Unlocked</div>
+      <div class="emoji-big">🎂</div>
+      <h1>HAPPY BIRTHDAY!</h1>
+      <p>Midnight protocol complete! Your official birthday perks are ready for claiming:</p>
+
+      <div class="btn-group">
+        <button class="btn-accent" onclick="showSection('vouchers')">🎁 Open Midnight Coupons</button>
+        <button class="btn-secondary" onclick="showSection('roast')">📜 Read Your Official Birthday Roast</button>
+        <button onclick="showSection('wishes')">💌 Serious Message (No Jokes)</button>
+      </div>
+    </div>
+
+    <!-- OPTION A: COUPONS -->
+    <div class="step" id="vouchers">
+      <div class="emoji-big">🎟️</div>
+      <h1>Your Birthday Perks</h1>
+      <p>Redeemable anytime over the next 365 days. Screenshot to lock it in!</p>
+
+      <div class="voucher">
+        <div class="voucher-title">1x "You Win Any Argument" Pass</div>
+        <div class="voucher-desc">Valid even when you make no logical sense.</div>
+      </div>
+
+      <div class="voucher">
+        <div class="voucher-title">Unlimited Late-Night Calls</div>
+        <div class="voucher-desc">Includes listening to daily gossip and random overthinking.</div>
+      </div>
+
+      <div class="voucher">
+        <div class="voucher-title">1x Food Feasting Privilege</div>
+        <div class="voucher-desc">You pick the place and the food bill is on me next time we meet.</div>
+      </div>
+
+      <button class="btn-secondary" style="margin-top: 14px;" onclick="nextStep(3)">⬅️ Back to Menu</button>
+    </div>
+
+    <!-- OPTION B: ROAST -->
+    <div class="step" id="roast">
+      <div class="emoji-big">🔍</div>
+      <h1>Annual Performance Review</h1>
+      <p style="text-align: left; font-size: 0.9rem; line-height: 1.6; margin-bottom: 18px;">
+        • <b>Attendance:</b> 10/10 on video calls.<br>
+        • <b>Patience level:</b> 2/10 (especially when hungry).<br>
+        • <b>Decision making:</b> Takes 45 minutes to choose what to wear or eat.<br>
+        • <b>Verdict:</b> Retained for another year despite repeated minor infractions.
+      </p>
+      <button class="btn-secondary" onclick="nextStep(3)">⬅️ Back to Menu</button>
+    </div>
+
+    <!-- OPTION C: SWEET NOTE -->
+    <div class="step" id="wishes">
+      <div class="emoji-big">✨</div>
+      <h1>From My Heart</h1>
+      <p style="text-align: left; font-size: 0.95rem; line-height: 1.6; margin-bottom: 20px;">
+        Distance might keep us miles apart tonight, but you are the first thing on my mind when the clock strikes 12. May this new year bring you everything you've been working toward, endless laughs, and zero stress.<br><br>
+        Now look up at your screen / check your phone — call me! ❤️
+      </p>
+      <button class="btn-secondary" onclick="nextStep(3)">⬅️ Back to Menu</button>
+    </div>
+
+  </div>
+
+  <script>
+    function nextStep(stepNumber) {
+      document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+      document.getElementById('step' + stepNumber).classList.add('active');
+    }
+
+    function showSection(sectionId) {
+      document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+      document.getElementById(sectionId).classList.add('active');
+    }
+
+    // Dodging "No" button logic
+    let dodgeCount = 0;
+    function dodgeButton() {
+      const btn = document.getElementById('btn-runaway');
+      dodgeCount++;
+      
+      const randomX = Math.floor(Math.random() * 140) - 70; // -70px to +70px
+      const randomY = Math.floor(Math.random() * 80) + 50;  // shifts down or away
+
+      btn.style.transform = `translate(${randomX}px, ${randomY}px)`;
+      
+      if (dodgeCount === 1) btn.innerText = "Nice try 😜";
+      if (dodgeCount === 2) btn.innerText = "Still no! 🏃";
+      if (dodgeCount >= 3) btn.innerText = "Just tap Yes! 😂";
+    }
+
+    // Confetti blast
+    function celebrateAndProceed() {
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+      setTimeout(() => {
+        nextStep(3);
+      }, 500);
+    }
+  </script>
+</body>
+</html>
